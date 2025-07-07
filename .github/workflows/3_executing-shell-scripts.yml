@@ -1,4 +1,4 @@
-name: executing-shell-script
+name: Executing Shell Script
 # on: push
 on: workflow_dispatch
 
