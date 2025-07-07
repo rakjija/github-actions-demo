@@ -1,0 +1,31 @@
+name: Environment Variable - Step Level
+
+on: workflow_dispatch
+
+env:
+  CONTAINER_REGISTRY: docker.io
+  DOCKER_USERNAME: hexbilly
+  IMAGE_NAME: no-name
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Docker Build
+        run: docker build -t ${{env.CONTAINER_REGISTRY}}/${{env.DOCKER_USERNAME}}/${{env.IMAGE_NAME}}:latest
+
+      - name: Docker Login
+        env:
+          DOCKER_PASSWORD: some_password
+        run: docker login --username=${{env.DOCKER_USERNAME}} --password=$DOCKER_PASSWORD
+
+      - name: Docker Publish
+        run: docker push $CONTAINER_REGISTRY/${{env.DOCKER_USERNAME}}/${{env.IMAGE_NAME}}:latest
+
+  deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Run
+        run: docker run -d -p 8080:80 $CONTAINER_REGISTRY/${{env.DOCKER_USERNAME}}/${{env.IMAGE_NAME}}:latest
