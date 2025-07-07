@@ -1,0 +1,12 @@
+name: My First Workflow # 워크플로우 고유 이름
+on: [push, fork] # 트리거
+jobs:
+  first_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Welcome message
+        run: echo "Hello, world!"
+      - name: List files
+        run: ls
+      - name: Read file
+        run: cat README.md
